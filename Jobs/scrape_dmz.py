@@ -19,7 +19,10 @@ while process_list:
         if pager_url not in processed_list:
             process_list.append(pager_url)
     # a monologue can contain several messages
-    monologues = scraper.extract_monologues(response.content)
-    messages = scraper.extract_messages_from_monologues(monologues)
-    ElasticManager.index_messages(messages)
+    try:
+        monologues = scraper.extract_monologues(response.content)
+        messages = scraper.extract_messages_from_monologues(monologues)
+        ElasticManager.index_messages(messages)
+    except Exception,e:
+        print e
 
