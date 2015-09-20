@@ -18,4 +18,4 @@ class ElasticManager(object):
     def index_messages(message_list):
         es = ESSessionManager().es_session
         for message in message_list:
-            es.index(index="secse", doc_type="monologue", id=message.id, body=message)
+            es.index(index="secse", doc_type="monologue", id=message["id"], body=message)
