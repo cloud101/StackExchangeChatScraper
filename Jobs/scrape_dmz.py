@@ -23,6 +23,6 @@ while process_list:
         monologues = scraper.extract_monologues(response.content)
         messages = scraper.extract_messages_from_monologues(monologues)
         ElasticManager.index_messages(messages)
-    except Exception,e:
+    except Exception, e:
         print e
 
