@@ -18,7 +18,7 @@ class TranscriptScraper(object):
         return BASE_URL+first_day_href
 
 
-    def process_monologues(self, monologues_soups):
+    def extract_messages_from_monologues(self, monologues_soups):
         """
 
         :param monologues_soups: BS4 soup where monologues have already been selected
