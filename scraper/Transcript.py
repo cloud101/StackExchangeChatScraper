@@ -1,9 +1,12 @@
 __author__ = 'lucas'
 from bs4 import BeautifulSoup
-import requests
+import requests,logging
+from config import BASE_URL,TRANSCRIPT
+from tools.Logger import get_logger
 
-BASE_URL = 'http://chat.stackexchange.com'
-TRANSCRIPT = '/transcript/'
+
+logger = get_logger("Transcript")
+
 
 class TranscriptScraper(object):
 
