@@ -21,6 +21,6 @@ class ElasticManager(object):
         es = ESSessionManager().es_session
         for message in message_list:
             try:
-                logger.info(es.index(index="secse", doc_type="monologue", id=message["id"], body=message))
+                logger.debug(es.index(index="secse", doc_type="monologue", id=message["id"], body=message))
             except Exception,e:
                 logger.exception(e)
