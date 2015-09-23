@@ -5,12 +5,11 @@ import os
 import sys
 import chatexchange.client
 import chatexchange.events
-
-logger = logging.getLogger(__name__)
+from database.Elastic import ElasticManager
+logger = logging.getLogger("ChatExchange")
 
 
 def main():
-    setup_logging()
 
     # Run `. setp.sh` to set the below testing environment variables
 
@@ -44,25 +43,8 @@ def on_message(message, client):
         # Ignore non-message_posted events.
         logger.debug("event: %r", message)
         return
+    logger.info(ElasticManager.index_message(message.__dict__["message"].jsonify()))
 
-    print message.__dict__["message"].jsonify()
-
-
-def setup_logging():
-    logging.basicConfig(level=logging.INFO)
-    logger.setLevel(logging.DEBUG)
-
-    # In addition to the basic stderr logging configured globally
-    # above, we'll use a log file for chatexchange.client.
-    wrapper_logger = logging.getLogger('chatexchange.client')
-    wrapper_handler = logging.handlers.TimedRotatingFileHandler(
-        filename='client.log',
-        when='midnight', delay=True, utc=True, backupCount=7,
-    )
-    wrapper_handler.setFormatter(logging.Formatter(
-        "%(asctime)s: %(levelname)s: %(threadName)s: %(message)s"
-    ))
-    wrapper_logger.addHandler(wrapper_handler)
 
 
 if __name__ == '__main__':

@@ -15,15 +15,21 @@ class TranscriptScraper(object):
 
     def get_first_day(self):
         response = requests.get(BASE_URL + TRANSCRIPT + str(self.room_id))
-        soup = BeautifulSoup(response.content)
+        soup = TranscriptScraper.get_bs(response.content)
         main_div = soup.find("div",{"id":"main"})
         first_day_href = main_div.find('a')["href"]
         return BASE_URL+first_day_href
+    
+    @staticmethod		
+    def get_bs(content):
+	try: 
+             return BeautifulSoup(content,"html5lib")
+	except:
+	     return BeautifulSoup(content,"html.parser")
 
 
     def extract_messages_from_monologues(self, monologues_soups):
         """
-
         :param monologues_soups: BS4 soup where monologues have already been selected
         :return: returns a list containing a dictionary of messages
         """
@@ -145,7 +151,7 @@ class TranscriptScraper(object):
         :return: list with hrefs to other transcript pages
         """
 
-        soup = BeautifulSoup(content)
+        soup = TranscriptScraper.get_bs(content)
         pager = soup.find("div",{"class":"pager"})
         if pager:
             return [BASE_URL+a['href'] for a in pager.find_all('a')]
@@ -154,7 +160,7 @@ class TranscriptScraper(object):
 
     @staticmethod
     def get_next_day(content):
-        soup = BeautifulSoup(content)
+        soup = TranscriptScraper.get_bs(content)
         main_div = soup.find("div",{"id":"main"})
         next_day_href = main_div.find('link',{'rel':'next'})['href']
         if next_day_href:
@@ -164,7 +170,7 @@ class TranscriptScraper(object):
 
 
     def extract_monologues(self,content):
-        soup = BeautifulSoup(content)
+        soup = TranscriptScraper.get_bs(content)
         monologues = soup.select('.monologue')
         return monologues
 
@@ -185,3 +191,4 @@ class TranscriptScraper(object):
         return str(
             monologue.select('.content')[0]
         ).partition('>')[2].rpartition('<')[0].strip()
+
