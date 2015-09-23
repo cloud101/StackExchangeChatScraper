@@ -24,3 +24,11 @@ class ElasticManager(object):
                 logger.debug(es.index(index="secse", doc_type="monologue", id=message["id"], body=message))
             except Exception,e:
                 logger.exception(e)
+
+    @staticmethod
+    def index_message(message):
+        es = ESSessionManager().es_session
+        try:
+            logger.debug(es.index(index="secse", doc_type="monologue", id=message["id"], body=message))
+        except Exception,e:
+            logger.exception(e)

@@ -6,10 +6,12 @@ import sys
 import chatexchange.client
 import chatexchange.events
 from database.Elastic import ElasticManager
-logger = logging.getLogger("ChatExchange")
+import time
+logger = logging.getLogger(__name__)
 
 
 def main():
+
 
     # Run `. setp.sh` to set the below testing environment variables
 
@@ -32,9 +34,7 @@ def main():
     room.join()
     room.watch(on_message)
     while True:
-        pass
-
-
+        time.sleep(1)
     client.logout()
 
 
@@ -44,7 +44,6 @@ def on_message(message, client):
         logger.debug("event: %r", message)
         return
     logger.info(ElasticManager.index_message(message.__dict__["message"].jsonify()))
-
 
 
 if __name__ == '__main__':
