@@ -8,4 +8,4 @@ es_rdd = sc.newAPIHadoopRDD(        inputFormatClass="org.elasticsearch.hadoop.m
 
 #queries
 
-es_rdd.first()
+es_rd_rdd.map(lambda a: (a[1]['owner_user_name'],1)).reduceByKey(lambda x,y:x+y).takeOrdered(25,key = lambda x: -x[1]).first()
