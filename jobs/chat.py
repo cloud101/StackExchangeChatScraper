@@ -7,14 +7,11 @@ import chatexchange.client
 import chatexchange.events
 from database.Elastic import ElasticManager
 import time
-logger = logging.getLogger(__name__)
+from tools.Logger import get_logger
+logger = get_logger("chat_scraper")
 
 
 def main():
-
-
-    # Run `. setp.sh` to set the below testing environment variables
-
     host_id = 'stackexchange.com'
     room_id = '151'  # Charcoal Chatbot Sandbox
 
@@ -43,7 +40,7 @@ def on_message(message, client):
         # Ignore non-message_posted events.
         logger.debug("event: %r", message)
         return
-    logger.info(ElasticManager.index_message(message.__dict__["message"].jsonify()))
+    ElasticManager.index_message(message.__dict__["message"].jsonify())
 
 
 if __name__ == '__main__':

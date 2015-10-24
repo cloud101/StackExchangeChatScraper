@@ -4,7 +4,7 @@ import requests
 from database.Elastic import ElasticManager
 from tools.Logger import get_logger
 from time import sleep
-
+import re
 logger = get_logger("scrape_dmz")
 scraper = TranscriptScraper(151)
 #keep a list which contains all URLs we need to fetch and process
@@ -17,7 +17,7 @@ headers = {
             'User-Agent': 'ChatExchangeScraper - contact Lucas Kauffman',
                 }
 
-
+x = 0
 while process_list:
     sleep(2)
     try:
@@ -31,10 +31,10 @@ while process_list:
          for pager_url in scraper.get_pager(response.content):
              if pager_url not in processed_list:
                  process_list.add(pager_url)
-         #a monologue can contain several messages
-         monologues = scraper.extract_monologues(response.content)
-         messages = scraper.extract_messages_from_monologues(monologues)
-         ElasticManager.index_messages(messages)
+         with open('/home/lucas/dmz/%s.html'%x,'w') as FILE:
+             FILE.write(response.content)
+             FILE.close()
+         x = x +1
     except Exception, e:
         logger.exception(e)
 

@@ -35,9 +35,15 @@ class TranscriptScraper(object):
         """
         messages_data = list()
         for monologue_soup in monologues_soups:
-            user_link, = monologue_soup.select('.signature .username a')
-            user_id, user_name = self.user_id_and_name_from_link(user_link)
-
+            try:
+                user_link, = monologue_soup.select('.signature .username a')
+                user_id, user_name = self.user_id_and_name_from_link(user_link)
+            except:
+                logger.info("user not avaialable")
+                logger.debug(monologue_soup)
+                user_link = ""
+                user_id = 0
+                user_name = "unknown"
             message_soups = monologue_soup.select('.message')
             for message_soup in message_soups:
                 message_id = int(message_soup['id'].split('-')[1])
